@@ -1,45 +1,96 @@
 package com.camunda.myBPM.faultBPM;
 
+import static org.camunda.bpm.engine.test.assertions.ProcessEngineAssertions.init;
+import static org.camunda.bpm.engine.test.assertions.ProcessEngineAssertions.assertThat;
+import static org.camunda.bpm.engine.test.assertions.ProcessEngineAssertions.processEngine;
+
 import org.apache.ibatis.logging.LogFactory;
-import org.camunda.bpm.engine.runtime.ProcessInstance;
+import org.camunda.bpm.engine.impl.persistence.entity.TaskEntity;
+import org.camunda.bpm.engine.runtime.ProcessInstanceWithVariables;
 import org.camunda.bpm.engine.test.Deployment;
 import org.camunda.bpm.engine.test.ProcessEngineRule;
+import org.camunda.bpm.engine.test.assertions.TaskAssert;
 import org.camunda.bpm.extension.process_test_coverage.junit.rules.TestCoverageProcessEngineRuleBuilder;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
-import static org.junit.Assert.*;
-
 /**
  * Test case starting an in-memory database-backed Process Engine.
  */
 public class ProcessUnitTest {
 
-  static {
-    LogFactory.useSlf4jLogging(); // MyBatis
-  }
-
   @ClassRule
   @Rule
   public static ProcessEngineRule rule = TestCoverageProcessEngineRuleBuilder.create().build();
+  
+  private static final String PROCESS_DEFINITION_KEY = "faultBPM";
+  
+  static {
+	  LogFactory.useSlf4jLogging(); // Setup logging
+  }
 
   @Before
   public void setup() {
     init(rule.getProcessEngine());
   }
-
+  
+  /**
+   * Tests if the process definition is deployable.
+   */
   @Test
   @Deployment(resources = "process.bpmn")
-  public void testHappyPath() {
-    // Drive the process by API and assert correct behavior by camunda-bpm-assert
+  public void testParsingAndDeployment() {
+	    // nothing is done here, as we just want to check for exceptions during deployment
+	  }
+  
+    @Test
+    @Deployment(resources = "process.bpmn")
+    public void testGatewayOne() {
+	  
+  	  ProcessInstanceWithVariables processInstance = (ProcessInstanceWithVariables) processEngine().getRuntimeService().startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
+  	  
+  	  boolean hardwareOK = (boolean) processInstance.getVariables().get("hardwareOK");
+  	  System.out.println("hardwareOK: " + hardwareOK);
+  
+  	  TaskAssert task = assertThat(processInstance).task();
+	  
+  	  if (hardwareOK) {
+  		  assertThat(processInstance).isWaitingAt("Activity_16pgm4r");
+  		  task.hasName("Software update");
+  		  task.isNotAssigned();
+//  		  System.out.println("testGatewayOne ended at 'Replace hardware' task");
+  	  }else {
+  		  assertThat(processInstance).isWaitingAt("Activity_16y89yw");
+  		  task.hasName("Test hardware");
+  		  task.isNotAssigned();
+//  		  System.out.println("testGatewayOne ended at 'Software update' task");
+  	  }
+    }
 
-    ProcessInstance processInstance = processEngine().getRuntimeService()
-        .startProcessInstanceByKey(ProcessConstants.PROCESS_DEFINITION_KEY);
+	  
+    @Test
+    @Deployment(resources = "process.bpmn")
+    public void testCompletionOftask() {
+    		
+    	// Obtain test run of BPMN
+    	ProcessInstanceWithVariables processInstance = 
+             (ProcessInstanceWithVariables) processEngine()	
+    .getRuntimeService()
+    .startProcessInstanceByKey(PROCESS_DEFINITION_KEY);
 
-    assertThat(processInstance).isEnded();
+    	// Obtain a reference to the current task
+    TaskAssert taskAssert = 
+    assertThat(processInstance).task();
+    		
+    	TaskEntity task = (TaskEntity)taskAssert.getActual();
+    	task.delegate("user");
+    		
+    	task.resolve();
+    
+    assertThat(processInstance.isEnded());
   }
+ }
+    
 
-}

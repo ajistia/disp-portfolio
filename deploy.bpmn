@@ -8,10 +8,6 @@
       <bpmn:incoming>Flow_1svgwgn</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="SequenceFlow1" sourceRef="StartEventProcessStarted" targetRef="Activity_0iiz3ha" />
-    <bpmn:manualTask id="Activity_0iiz3ha" name="Visit school">
-      <bpmn:incoming>SequenceFlow1</bpmn:incoming>
-      <bpmn:outgoing>Flow_090wx3w</bpmn:outgoing>
-    </bpmn:manualTask>
     <bpmn:sequenceFlow id="Flow_090wx3w" sourceRef="Activity_0iiz3ha" targetRef="Activity_0o9v32u" />
     <bpmn:sequenceFlow id="Flow_0fifjqt" sourceRef="Activity_0o9v32u" targetRef="Gateway_034odbo" />
     <bpmn:exclusiveGateway id="Gateway_034odbo" name="Software fault?">
@@ -70,6 +66,10 @@
     <bpmn:userTask id="Activity_1z0z47m" name="Reinstall software">
       <bpmn:incoming>Flow_01u8rrx</bpmn:incoming>
       <bpmn:outgoing>Flow_0w9r1y8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_0iiz3ha" name="Visit school">
+      <bpmn:incoming>SequenceFlow1</bpmn:incoming>
+      <bpmn:outgoing>Flow_090wx3w</bpmn:outgoing>
     </bpmn:userTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -144,9 +144,6 @@
           <dc:Bounds x="137" y="306" width="65" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0iiz3ha_di" bpmnElement="Activity_0iiz3ha">
-        <dc:Bounds x="280" y="240" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_034odbo_di" bpmnElement="Gateway_034odbo" isMarkerVisible="true">
         <dc:Bounds x="665" y="255" width="50" height="50" />
         <bpmndi:BPMNLabel>
@@ -194,6 +191,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1e34kax_di" bpmnElement="Activity_1z0z47m">
         <dc:Bounds x="1000" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01h2j0b_di" bpmnElement="Activity_0iiz3ha">
+        <dc:Bounds x="280" y="240" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
