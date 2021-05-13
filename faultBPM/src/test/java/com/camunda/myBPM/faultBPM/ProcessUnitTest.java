@@ -60,12 +60,10 @@ public class ProcessUnitTest {
   		  assertThat(processInstance).isWaitingAt("Activity_16pgm4r");
   		  task.hasName("Software update");
   		  task.isNotAssigned();
-//  		  System.out.println("testGatewayOne ended at 'Replace hardware' task");
   	  }else {
   		  assertThat(processInstance).isWaitingAt("Activity_16y89yw");
   		  task.hasName("Test hardware");
   		  task.isNotAssigned();
-//  		  System.out.println("testGatewayOne ended at 'Software update' task");
   	  }
     }
 

@@ -52,31 +52,36 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not updateOK}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_1dq0prh" name="Request closed">
-      <bpmn:incoming>Flow_0w9r1y8</bpmn:incoming>
+      <bpmn:incoming>Flow_0cc2fy4</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0w9r1y8" sourceRef="Activity_1z0z47m" targetRef="Event_1dq0prh" />
-    <bpmn:serviceTask id="Activity_16pgm4r" name="Software update" camunda:class="com.camunda.myBPM.faultBPM.SoftwareUpdateProcess">
-      <bpmn:incoming>Flow_06872xj</bpmn:incoming>
-      <bpmn:outgoing>Flow_1hyczj2</bpmn:outgoing>
-    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0w9r1y8" sourceRef="Activity_1z0z47m" targetRef="Activity_1hydvqn" />
     <bpmn:manualTask id="Activity_0iiz3ha" name="Visit school">
       <bpmn:incoming>SequenceFlow1</bpmn:incoming>
       <bpmn:outgoing>Flow_090wx3w</bpmn:outgoing>
-    </bpmn:manualTask>
-    <bpmn:manualTask id="Activity_13859kl" name="Replace hardware">
-      <bpmn:incoming>Flow_0c31lkp</bpmn:incoming>
-      <bpmn:outgoing>Flow_0j8nq1m</bpmn:outgoing>
     </bpmn:manualTask>
     <bpmn:serviceTask id="Activity_1z0z47m" name="Reinstall software" camunda:class="com.camunda.myBPM.faultBPM.LoggerDelegate">
       <bpmn:incoming>Flow_01u8rrx</bpmn:incoming>
       <bpmn:outgoing>Flow_0w9r1y8</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_13859kl" name="Replace hardware">
+      <bpmn:incoming>Flow_0c31lkp</bpmn:incoming>
+      <bpmn:outgoing>Flow_0j8nq1m</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_16pgm4r" name="Software update" camunda:class="com.camunda.myBPM.faultBPM.SoftwareUpdateProcess">
+      <bpmn:incoming>Flow_06872xj</bpmn:incoming>
+      <bpmn:outgoing>Flow_1hyczj2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0cc2fy4" sourceRef="Activity_1hydvqn" targetRef="Event_1dq0prh" />
+    <bpmn:userTask id="Activity_1hydvqn" name="Software reinstalled">
+      <bpmn:incoming>Flow_0w9r1y8</bpmn:incoming>
+      <bpmn:outgoing>Flow_0cc2fy4</bpmn:outgoing>
+    </bpmn:userTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="faultBPM">
       <bpmndi:BPMNEdge id="Flow_0w9r1y8_di" bpmnElement="Flow_0w9r1y8">
         <di:waypoint x="1100" y="120" />
-        <di:waypoint x="1452" y="120" />
+        <di:waypoint x="1210" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_01u8rrx_di" bpmnElement="Flow_01u8rrx">
         <di:waypoint x="1050" y="255" />
@@ -138,6 +143,10 @@
           <dc:Bounds x="337.5" y="110" width="90" height="20" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cc2fy4_di" bpmnElement="Flow_0cc2fy4">
+        <di:waypoint x="1310" y="120" />
+        <di:waypoint x="1452" y="120" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEventProcessStarted">
         <dc:Bounds x="152" y="262" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -186,14 +195,17 @@
           <dc:Bounds x="1432" y="145" width="76" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1xywevm_di" bpmnElement="Activity_16pgm4r">
-        <dc:Bounds x="840" y="240" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0yjbguq_di" bpmnElement="Activity_13859kl">
-        <dc:Bounds x="840" y="430" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0b43tlo_di" bpmnElement="Activity_1z0z47m">
         <dc:Bounds x="1000" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0k39xac_di" bpmnElement="Activity_13859kl">
+        <dc:Bounds x="840" y="430" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1fcksd3_di" bpmnElement="Activity_16pgm4r">
+        <dc:Bounds x="840" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09vwykf_di" bpmnElement="Activity_1hydvqn">
+        <dc:Bounds x="1210" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
